@@ -1,0 +1,52 @@
+{
+  "name": "image-processing-api",
+  "version": "1.0.0",
+  "description": "Udacity FWD's first project",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.ts",
+    "lint": "eslint . --config .eslintrc --ext .ts",
+    "prettier": "prettier --config .prettierrc \"src/**/*.ts\" --write",
+    "check": "npm run prettier && npm run lint",
+    "build": "npx tsc",
+    "build-and-run": "npx tsc && node ./build/index.js",
+    "jasmine": "jasmine",
+    "test": "npm run build && npm run jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmed-hany94/image-processing-api.git"
+  },
+  "keywords": [
+    "image-processing",
+    "image-conversion"
+  ],
+  "author": "Ahmed Hany",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ahmed-hany94/image-processing-api/issues"
+  },
+  "homepage": "https://github.com/ahmed-hany94/image-processing-api#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "jasmine": "^4.5.0",
+    "jasmine-spec-reporter": "^7.0.0",
+    "sharp": "^0.31.3",
+    "supertest": "^6.3.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.15",
+    "@types/jasmine": "^4.3.1",
+    "@types/node": "^18.11.18",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  }
+}
