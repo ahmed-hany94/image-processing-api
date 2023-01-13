@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,,height=device-height, initial-scale=1.0"
+    />
+    <meta
+      name="description"
+      content="A simple front-end to test image converting API backend"
+    />
+    <meta
+      name="keywords"
+      content="image-conversion,api,backend,frontend,jpeg,jpg,png"
+    />
+    <link rel="stylesheet" href="index.screen.css" media="screen" />
+    <script src="index.js" defer></script>
+    <title>IMAGE API FRONTEND</title>
+  </head>
+  <body>
+    <main>
+      <form name="convertForm" enctype="multipart/form-data">
+        <h1><strong>Image Converter</strong></h1>
+        <fieldset>
+          <label
+            >Filename:<br /><input
+              type="file"
+              accept="image/*"
+              name="filename"
+              required
+              autofocus /><br
+          /></label>
+          <label
+            >Width:<br /><input id="width" name="width" required /><br
+          /></label>
+          <label
+            >Height:<br /><input id="height" name="height" required /><br
+          /></label>
+          <label
+            >Extension:<br />
+            <select id="ext" name="ext">
+              <option value="">--Please choose an extension--</option>
+              <option value="jpeg">JPEG</option>
+              <option value="png">PNG</option>
+              <option value="WebP">webp</option>
+              <option value="gif">GIF</option>
+              <option value="avif">AVIF</option>
+            </select>
+            <br
+          /></label>
+        </fieldset>
+
+        <div>
+          <label id="error-msg"></label>
+        </div>
+        <footer>
+          <button>Convert</button>
+        </footer>
+      </form>
+    </main>
+  </body>
+</html>

@@ -1,16 +1,18 @@
-import { promises as fsPromises } from 'fs';
 import { ERROR_MESSAGES, Error_Reason, FULL_PATH_PREFIX } from './constants';
+import { getFileFromDir } from './filesystem';
 
 async function sendIndexPage(): Promise<string> {
   let html = `
         <h1>Hello, world from my server</h1>
-        <p>Files avaiable to be converted in the 'full' directory</p>
+        <p>Files available to be converted in the 'full' directory</p>
         <ul>
       `;
 
   await (
-    await fsPromises.readdir(FULL_PATH_PREFIX)
-  ).forEach((file) => (html += `<li>${file}</li>`));
+    await getFileFromDir(FULL_PATH_PREFIX)
+  ).forEach((file) => {
+    html += `<li>${file}</li>`;
+  });
   html += '</ul>';
   return html;
 }

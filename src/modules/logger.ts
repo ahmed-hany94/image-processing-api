@@ -1,20 +1,16 @@
-import winston from 'winston';
+import { createLogger, transports, format } from 'winston';
 import { LOG_DIR } from './constants';
 
-const logger = winston.createLogger({
+const logger = createLogger({
   level: 'info',
-  format: winston.format.json(),
+  format: format.combine(format.timestamp(), format.json()),
   defaultMeta: { service: 'user-service' },
   transports: [
-    //
-    // - Write all logs with importance level of `error` or less to `error.log`
-    // - Write all logs with importance level of `info` or less to `combined.log`
-    //
-    new winston.transports.File({
+    new transports.File({
       filename: `${LOG_DIR}/error.log`,
       level: 'error'
     }),
-    new winston.transports.File({ filename: `${LOG_DIR}/combined.log` })
+    new transports.File({ filename: `${LOG_DIR}/combined.log` })
   ]
 });
 

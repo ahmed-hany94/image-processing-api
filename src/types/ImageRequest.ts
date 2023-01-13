@@ -1,5 +1,3 @@
-import { Request } from 'express';
-
 type ImageRequest = {
   fname: string;
   extension: string;
@@ -13,16 +11,24 @@ type ImageRequest = {
   isHeightParamNull: boolean;
 };
 
-function createImageRequest(req: Request): ImageRequest {
-  const filename = req.query.filename as string;
-  const width = parseInt(req.query.width as string);
-  const height = parseInt(req.query.height as string);
-  const ext = req.query.extension as string;
+function createImageRequest(
+  f: string,
+  w: string,
+  h: string,
+  e: string
+): ImageRequest {
+  const filename = f as string;
+  const width = parseInt(w as string);
+  const height = parseInt(h as string);
+  const ext = e as string;
 
   let fname = '';
   let extension = '';
 
   if (filename) {
+    // If there is no extension param
+    //   extract name and convert to the same extension
+    // Else extract the name and convert to the extension param type
     if (filename.split('.').length === 2) {
       fname = filename.split('.')[0];
       extension = !ext ? filename.split('.')[1] : ext;

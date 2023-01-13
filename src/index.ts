@@ -1,35 +1,79 @@
-import express, { Express, Request, Response } from 'express';
+import express, {
+  Express,
+  NextFunction,
+  Request,
+  Response,
+  Router
+} from 'express';
+import cors from 'cors';
+import multer from 'multer';
 import { convert } from './modules/convert';
-import { PORT, ASSETS_DIR, Error_Reason } from './modules/constants';
+import {
+  PORT,
+  Error_Reason,
+  PUBLIC_DIR,
+  FULL_PATH_PREFIX
+} from './modules/constants';
 import { sendErrorPage, sendIndexPage } from './modules/page';
 import { createImageRequest, ImageRequest } from './types/ImageRequest';
 import { logger } from './modules/logger';
+import { checkIfFileExists, getFileFromDir } from './modules/filesystem';
 
 const app: Express = express();
-app.use(express.static(ASSETS_DIR));
+const router: Router = express.Router();
+app.use(cors());
+app.use('/public', express.static(PUBLIC_DIR));
 
-app.get('/', (_, res: Response) => {
-  res.redirect('/api/images');
+const storage = multer.diskStorage({
+  destination: FULL_PATH_PREFIX
+  // filename: function (req, file, cb) {
+  //   const width = req.body.width;
+  //   const height = req.body.height;
+  //   const ext = req.body.ext;
+
+  //   console.log(width, height, ext);
+
+  //   cb(null, file.originalname);
+  // }
 });
 
-app.get(
-  '/api/images',
-  async function (req: Request, res: Response): Promise<void> {
+const upload = multer({ storage: storage });
+
+router.route('/').get(function (req: Request, res: Response) {
+  res.redirect('/public/index.html');
+});
+
+router
+  .route('/api/images')
+  .get(async function (req: Request, res: Response): Promise<void> {
     try {
-      const imageRequest: ImageRequest = createImageRequest(req);
+      const imageRequest: ImageRequest = createImageRequest(
+        req.query.filename as string,
+        req.query.width as string,
+        req.query.height as string,
+        req.query.ext as string
+      );
       if (imageRequest.isValidRequest) {
         logger.info('Valid Request');
         // TODO: support other image formats
-        // TODO: Allow for multiple sizes for the same image
         // TODO: explore sharp
-        // TODO: add logging
-        // TODO: create front-end for upload, display, editing
-        // TODO: put different functions in a separate module (file)
+        // TODO: create front-end for
+        //       upload, display, editing
+        // TODO: put different functions in
+        //       a separate module (file)
+        // TODO: Write the README,
+        //       mention logging but it's .gitignored
+        // TODO: Fix the extension setting if it's set
+        //       in the filename param too
+        // Search in all the files for todos or comments
+        // Comment the code if needed
+        // TODO: Responsive UI
         // Reference: https://review.udacity.com/#!/rubrics/3005/view
 
         const convertedImageFilePath = await convert(imageRequest);
 
         if (convertedImageFilePath !== '') {
+          logger.info('Converting Image Successfully');
           res.status(200).sendFile(convertedImageFilePath);
         } else {
           logger.info('File Does not exist');
@@ -62,8 +106,40 @@ app.get(
       );
       res.status(404).send(html);
     }
+  });
+
+router
+  .route('/api/upload')
+  .post(
+    upload.single('img'),
+    async function (req: Request, res: Response, next: NextFunction) {
+      if (
+        await checkIfFileExists(`${FULL_PATH_PREFIX}${req.file?.originalname}`)
+      ) {
+        const imageRequest: ImageRequest = createImageRequest(
+          req.file?.originalname as string,
+          req.body.width,
+          req.body.height,
+          req.body.ext
+        );
+
+        const convertedImageFilePath = await convert(imageRequest);
+      } else {
+        res.status(404).end();
+      }
+    }
+  );
+
+router.route('/api/files').get(async function (req: Request, res: Response) {
+  const filesList = await getFileFromDir(FULL_PATH_PREFIX);
+  if (filesList.length > 0) {
+    res.status(200).json(filesList);
+  } else {
+    res.status(204).end();
   }
-);
+});
+
+app.use('/', router);
 
 app.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
