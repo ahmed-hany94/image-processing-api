@@ -3,28 +3,6 @@ const errorElement = document.querySelector('#error-msg');
 const listElement = document.querySelector('#file-listing');
 const filenameElement = document.querySelector('input[type="file"]');
 
-async function getFiles() {
-  try {
-    let files = await fetch('/api/files');
-    if (files.status === 204) {
-      const textElement = document.createElement('p');
-      textElement.textContent = 'Directory is empty.';
-      listElement.appendChild(textElement);
-    } else {
-      files = await files.json();
-      files.forEach((file) => {
-        let liElement = document.createElement('li');
-        liElement.textContent = file;
-        listElement.appendChild(liElement);
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-// getFiles();
-
 formElement.addEventListener('submit', async (event) => {
   event.preventDefault();
 
@@ -44,15 +22,15 @@ formElement.addEventListener('submit', async (event) => {
       body: formData
     });
 
-    // if (res.status === 200) {
-    //   window.location.href =
-    //     `/api/images/?filename=${event.target.filename.value}` +
-    //     `&width=${event.target.width.value}` +
-    //     `&height=${event.target.height.value}` +
-    //     `&ext=${event.target.ext.value}`;
-    // } else {
-    //   errorElement.textContent = `Error: ${res.statusText}`;
-    // }
+    if (res.status === 200) {
+      window.location.href =
+        `/api/images/?filename=${filenameElement.files[0].name}` +
+        `&width=${event.target.width.value}` +
+        `&height=${event.target.height.value}` +
+        `&ext=${event.target.ext.value}`;
+    } else {
+      errorElement.textContent = `Error: ${res.statusText}`;
+    }
   } else {
     errorElement.textContent = `Error: accepts only image type of`;
   }

@@ -78,7 +78,7 @@ textarea:focus {
 body {
   --background-hue: 217;
   --background-sat: 40%;
-  --background-light: 8%;
+  --background-light: 7%;
 
   --border-hue: 40;
   --border-sat: 80%;
@@ -107,29 +107,16 @@ body {
 main {
   margin: 0 auto;
   max-width: 64rem;
-  padding: clamp(2rem, min(4vh, 2vw), 8rem) clamp(0.5rem, 2vw, 2rem);
+  padding: clamp(2rem, min(4vh, 2vw), 8rem) clamp(2rem, 2vw, 4rem);
+  min-width: 20rem;
 }
 
 form {
-  padding: 3rem;
+  padding: 1rem;
   border: 0.125rem solid var(--yellow);
   box-shadow: 0.125rem 0.125rem var(--yellow), -0.125rem -0.125rem var(--yellow),
     0.25rem 0.25rem var(--yellow), -0.25rem -0.25rem var(--yellow);
   border-radius: 0.2rem;
-}
-
-section {
-  display: flex;
-}
-
-article {
-  flex-grow: 0;
-}
-
-article:nth-child(2) {
-  border-left: 0.125rem solid var(--yellow);
-  padding-left: 1rem;
-  margin-left: 1rem;
 }
 
 h1 {
@@ -141,9 +128,14 @@ h1 {
   color: var(--white-70);
 }
 
+span {
+  color: var(--red);
+}
+
 label {
   display: block;
   text-indent: 0.625rem;
+  margin-bottom: 0.625rem;
 }
 
 #error-msg {
@@ -151,6 +143,7 @@ label {
 }
 
 #ext {
+  width: 100%;
   padding: 0.5rem 0.25rem;
   color: var(--white-70);
   border-radius: 0.25rem;
@@ -159,6 +152,7 @@ label {
 
 input {
   width: 100%;
+  height: 2.25rem;
   padding: 0.25em 0.5em;
   margin: 0.125em 0 0.75em;
   border: 0.0625rem solid var(--yellow);
@@ -177,31 +171,15 @@ footer {
   text-align: center;
   margin-top: 1.75rem;
   padding-top: 1rem;
-  border-top: 0.125rem solid var(--yellow);
+  border-top: 0.25rem solid var(--yellow);
 }
 
 button {
-  background: hsl(217, 70%, 35%);
-  border: 0.0625rem solid hsl(217, 70%, 10%);
+  background: var(--light-navy);
+  border: 0.0625rem solid var(--yellow);
   color: var(--white-70);
   border-radius: 0.25em;
   padding: 0.5rem 1rem;
   text-decoration: underline;
   text-underline-offset: 0.25rem;
-}
-
-@media (max-width: 40rem) {
-  article:nth-child(2) {
-    display: none;
-  }
-}
-
-@media (max-width: 30rem) {
-  h1 {
-    font-size: 1.5rem;
-  }
-
-  input {
-    width: 90%;
-  }
 }

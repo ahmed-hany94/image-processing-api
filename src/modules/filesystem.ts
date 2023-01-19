@@ -1,5 +1,4 @@
 import { promises as fsPromises } from 'fs';
-import path from 'path';
 import { logger } from './logger';
 
 async function getFileFromDir(dirPath: string): Promise<string[]> {

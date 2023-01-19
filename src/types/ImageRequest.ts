@@ -2,6 +2,7 @@ type ImageRequest = {
   fname: string;
   extension: string;
   fullFilename: string;
+  originalFilename: string;
   width: number;
   height: number;
   isValidRequest: boolean;
@@ -24,6 +25,7 @@ function createImageRequest(
 
   let fname = '';
   let extension = '';
+  let _originalFilename = '';
 
   if (filename) {
     // If there is no extension param
@@ -31,6 +33,7 @@ function createImageRequest(
     // Else extract the name and convert to the extension param type
     if (filename.split('.').length === 2) {
       fname = filename.split('.')[0];
+      _originalFilename = filename;
       extension = !ext ? filename.split('.')[1] : ext;
     } else {
       fname = filename;
@@ -42,6 +45,7 @@ function createImageRequest(
     fname: fname,
     extension: extension,
     fullFilename: `${fname}.${extension}`,
+    originalFilename: _originalFilename,
     width: width,
     height: height,
     isValidRequest: filename && width && height ? true : false,

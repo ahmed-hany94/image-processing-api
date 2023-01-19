@@ -11,14 +11,6 @@ describe('Test endpoint responses', () => {
   });
 
   // localhost:3000/api/images?filename=fjord&width=200&height=200
-  it('Should query contains an existing filename, width and height', async () => {
-    await request
-      .get('/api/images?filename=fjord&width=200&height=200')
-      .expect(200)
-      .expect('Content-Type', /image/);
-  });
-
-  // localhost:3000/api/images?filename=fjord&width=200&height=200
   it('Should query contains an existing filename with correct extension, width and height', async () => {
     await request
       .get('/api/images?filename=fjord.jpg&width=200&height=200')

@@ -1,10 +1,4 @@
-import express, {
-  Express,
-  NextFunction,
-  Request,
-  Response,
-  Router
-} from 'express';
+import express, { Express, Request, Response, Router } from 'express';
 import cors from 'cors';
 import multer from 'multer';
 import { convert } from './modules/convert';
@@ -17,7 +11,7 @@ import {
 import { sendErrorPage, sendIndexPage } from './modules/page';
 import { createImageRequest, ImageRequest } from './types/ImageRequest';
 import { logger } from './modules/logger';
-import { checkIfFileExists, getFileFromDir } from './modules/filesystem';
+import { checkIfFileExists } from './modules/filesystem';
 
 const app: Express = express();
 const router: Router = express.Router();
@@ -26,15 +20,6 @@ app.use('/public', express.static(PUBLIC_DIR));
 
 const storage = multer.diskStorage({
   destination: FULL_PATH_PREFIX
-  // filename: function (req, file, cb) {
-  //   const width = req.body.width;
-  //   const height = req.body.height;
-  //   const ext = req.body.ext;
-
-  //   console.log(width, height, ext);
-
-  //   cb(null, file.originalname);
-  // }
 });
 
 const upload = multer({ storage: storage });
@@ -110,34 +95,30 @@ router
 
 router
   .route('/api/upload')
-  .post(
-    upload.single('img'),
-    async function (req: Request, res: Response, next: NextFunction) {
-      if (
-        await checkIfFileExists(`${FULL_PATH_PREFIX}${req.file?.originalname}`)
-      ) {
-        const imageRequest: ImageRequest = createImageRequest(
-          req.file?.originalname as string,
-          req.body.width,
-          req.body.height,
-          req.body.ext
-        );
+  .post(upload.single('img'), async function (req: Request, res: Response) {
+    if (
+      await checkIfFileExists(`${FULL_PATH_PREFIX}${req.file?.originalname}`)
+    ) {
+      const imageRequest: ImageRequest = createImageRequest(
+        req.file?.originalname as string,
+        req.body.width,
+        req.body.height,
+        req.body.ext
+      );
 
-        const convertedImageFilePath = await convert(imageRequest);
+      const convertedImageFilePath = await convert(imageRequest);
+
+      if (convertedImageFilePath !== '') {
+        logger.info('Converting Image Successfully');
+        res.status(200).json({ path: convertedImageFilePath });
       } else {
-        res.status(404).end();
+        logger.info('Frontend Conversion Failed.');
+        res.status(404).json({ msg: 'Error' });
       }
+    } else {
+      res.status(404).end();
     }
-  );
-
-router.route('/api/files').get(async function (req: Request, res: Response) {
-  const filesList = await getFileFromDir(FULL_PATH_PREFIX);
-  if (filesList.length > 0) {
-    res.status(200).json(filesList);
-  } else {
-    res.status(204).end();
-  }
-});
+  });
 
 app.use('/', router);
 
