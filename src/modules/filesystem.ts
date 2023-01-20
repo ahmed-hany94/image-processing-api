@@ -15,7 +15,6 @@ async function getFileFromDir(dirPath: string): Promise<string[]> {
 
 async function checkIfFileExists(filePath: string): Promise<boolean> {
   try {
-    // TODO: Here is where we need to check extension
     await fsPromises.access(filePath);
     return true;
   } catch {

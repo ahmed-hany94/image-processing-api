@@ -40,20 +40,6 @@ router
       );
       if (imageRequest.isValidRequest) {
         logger.info('Valid Request');
-        // TODO: support other image formats
-        // TODO: explore sharp
-        // TODO: create front-end for
-        //       upload, display, editing
-        // TODO: put different functions in
-        //       a separate module (file)
-        // TODO: Write the README,
-        //       mention logging but it's .gitignored
-        // TODO: Fix the extension setting if it's set
-        //       in the filename param too
-        // Search in all the files for todos or comments
-        // Comment the code if needed
-        // TODO: Responsive UI
-        // Reference: https://review.udacity.com/#!/rubrics/3005/view
 
         const convertedImageFilePath = await convert(imageRequest);
 
